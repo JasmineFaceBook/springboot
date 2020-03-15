@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>jasmine文件上传</title>
+	 <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+	 <link rel="stylesheet" href="css/fileinput.css" type="text/css" />
+</head>
+
+
+
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/ajaxfileupload.js"></script>
+
+<style type="text/css">
+    table.imagetable {
+        font-family: verdana,arial,sans-serif;
+        font-size:17px;
+        color:#333333;
+        border-width: 1px;
+        border-color: #999999;
+        border-collapse: collapse;
+    }
+    table.imagetable th {
+        background:#b5cfd2 url('cell-blue.jpg');
+        border-width: 1px;
+        padding: 8px;
+        border-style: solid;
+        border-color: #999999;
+    }
+    table.imagetable td {
+        background:#dcddc0 url('cell-grey.jpg');
+        border-width: 1px;
+        padding: 8px;
+        border-style: solid;
+        border-color: #999999;
+    }
+</style>
+
+
+<script>
+
+    $(function() {
+        loadList();  //待调用的函数
+    });
+
+function postData(){
+    $("#enter").val("文件上传中!");
+    $("#enter").css("color","red");
+    $("#enter").attr("disabled", true);
+    var passWord=$("#passWord").val();
+    var eles = [];
+    eles.push(passWord);
+    var esz = encode("0x12",eles);
+    $.ajaxFileUpload({
+                fileElementId: 'inputFile',    //需要上传的文件域的ID，即<input type="file">的ID。
+                url: 'http://'+$("#ip").val()+':'+$("#port").val()+'/jas/upload', //后台方法的路径
+                type: 'POST',   //当要提交自定义参数时，这个参数要设置成post
+				data:{path:$("#path").val(),
+                password: esz},
+				dataType: 'json',   //服务器返回的数据类型。可以为xml,script,json,html。如果不填写，jQuery会自动判断。
+                async: false,  //是否是异步
+                success: function(data) {   //提交成功后自动执行的处理函数，参数data就是服务器返回的数据。
+                       if(undefined!=data)
+                       {
+                           if(confirm(data.message)){
+                              // $("#inputFile").bind("change", function(){});
+                               $("#enter").val("文件上传");
+                               $("#enter").css("color","green");
+                               $("#enter").attr("disabled", false);
+                               loadList();
+                           }
+                       }
+                       else {
+                           alert("上传失败!");
+                       }
+                },
+                error: function(data, status, e) {  //提交失败自动执行的处理函数。
+                    console.error(e);
+                }
+});
+}
+function loadList() {
+    $("#data").empty();
+    $.ajax({
+        url:'http://'+$("#ip").val()+':'+$("#port").val()+'/jas/dir',//地址
+        dataType:'json',//数据类型
+        type:'GET',//类型
+        data:{path:$("#path").val()},
+        timeout:2000,//超时
+        //请求成功
+        success:function(data,status){
+            var html="";
+            for(var i=0;i<data.length;i++){
+                html+="<tr><td>"+(i+1)+"</td>";
+                html+="<td>"+data[i].fileName+"</td>";
+                html+="<td>"+data[i].path+"</td></tr>";
+            }
+           $("#data").append(html)
+        },
+        //失败/超时
+        error:function(XMLHttpRequest,textStatus,errorThrown){
+            if(textStatus==='timeout'){
+                alert('請求超時');
+                setTimeout(function(){
+                    alert('重新请求');
+                },2000);
+            }
+            //alert(errorThrown);
+        }
+    })
+
+}
+
+    function encode(key, eles) {
+        var keyVal = parseInt(key)
+        var arr = []
+        for(var i = 0; i < eles.length; ++i) {
+            var ele = eles[i]
+            arr.push(ele.length ^ keyVal)
+            for(var j = 0; j < ele.length; ++j) {
+                arr.push(ele[j].charCodeAt(0) ^ keyVal)
+            }
+        }
+        arr.push(keyVal)
+        var context = "CV16" + arr.join("%")
+        return context;
+    }
+
+</script>
+<body style="margin: 4%;line-height: 29px;font-size: 17px;text-align: center;">
+<div style="">
+<table>
+    <tr><th>服务器ip：</th><td><input type="text" id="ip" name="ip" value="localhost" style="width:240px;"/></td></tr>
+    <tr><th>端口号：</th><td><input type="text" id="port" name="port" value="8080" style="width:240px;"/></td></tr>
+    <tr><th>上传密码：</th><td><input type="password" id="passWord" name="passWord" value="123456" style="width:240px;"/></td></tr>
+    <tr><th>文件上传：</th><td><input type="file" id="inputFile" name="inputFile" value="文件上传" style="margin-left: 12%;"/> </td></tr>
+    <tr><th>上传路径:：</th><td><input type="text" id="path" name="path" value="D:\idea-workspace\upload\ss/" style="width:240px;"/></td></tr>
+    <tr><th><input type="button" onclick="postData()" value="文件上传" name="enter" id="enter"
+                   style="width:100px;height:30px;color: green;"/></th>
+        <th><input type="button" onclick="loadList()" value="列表查询" name="query" id="query"
+                   style="width:100px;height:30px;color: green;margin-left: 102%;"/></th>
+    </tr>
+    </table>
+</div>
+<table class="imagetable">
+    <tr><th>序号</th><th>文件名称</th><th>文件路径</th></tr>
+    <tbody id="data">
+    
+    </tbody>
+</table>
+</body>
+</html>
