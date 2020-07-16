@@ -4,16 +4,25 @@ import org.junit.Test;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class TestAll {
 
 	@Test
 	public void test() throws ParseException {
 
-	  /*  JSON parentsJson=new JSONObject();
+		ArrayList<String> a = new ArrayList<>(10);
+		for (int i = 0; i < 10; i ++) {
+			a.add(i + "");
+		}
+
+		ArrayList<String> b = (ArrayList<String>) a.subList(0, 5);
+
+		System.out.println(b.get(0));
+
+
+
+		/*  JSON parentsJson=new JSONObject();
 	    JSONObject transitCityOneJson = new JSONObject();
         transitCityOneJson.put("parentName", "zhongguo人");
         System.out.println("是不是工作日："+getWorkDayFlag ("2018-05-07"));*/
@@ -34,7 +43,20 @@ public class TestAll {
 		double s=betweenDate/365;
 		System.out.println("ss:"+(s*5)+",s:"+s);
 
-		Map map=new HashMap();
+		String  endDates="20200204";
+
+		String month=endDates.substring(4,6);
+		if(month.substring(0,1).equals("0")){
+			month=month.substring(1,2);
+			System.out.println("month:"+month);
+		}
+		String day=endDates.substring(6,endDates.length());
+		if(day.substring(0,1).equals("0")){
+			day=day.substring(1,2);
+		}
+		System.out.println(month+"."+day);
+
+
 
 
 

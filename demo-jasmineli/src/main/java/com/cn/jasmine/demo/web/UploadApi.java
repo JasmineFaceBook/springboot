@@ -64,9 +64,6 @@ public class UploadApi {
             return map;
         }
 
-
-
-
         try {
             InputStream in = inputFile.getInputStream();
             byte[] buffer = new byte[1024];
