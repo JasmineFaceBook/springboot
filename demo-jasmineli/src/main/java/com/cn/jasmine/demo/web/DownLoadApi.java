@@ -44,6 +44,7 @@ public class DownLoadApi {
            font2.setBoldweight(HSSFFont.BOLDWEIGHT_NORMAL);//不是粗体显示 
         HSSFCellStyle styleline1 = getStyle(workbook, HSSFColor.BLACK.index,HSSFColor.ROSE.index,HSSFColor.ROSE.index);
         styleline1.setFont(font2);
+
         //去掉上左右边框
        /* styleline1.setBorderRight(HSSFCellStyle.BORDER_NONE);
         styleline1.setBorderLeft(HSSFCellStyle.BORDER_NONE);
