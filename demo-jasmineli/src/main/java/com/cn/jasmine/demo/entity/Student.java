@@ -1,6 +1,6 @@
 package com.cn.jasmine.demo.entity;
 
-public class Student {
+public class Student extends ObjectToString{
 
     private String id;
 

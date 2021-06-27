@@ -95,7 +95,7 @@ public class UploadApi {
     @ResponseBody
     public String test(){
 
-        System.out.println("fileUrl:"+fileUpload);
+        System.out.println("fileUrl:"+fileUploadEnterWord);
         return "文件上传成功！";
     }
 

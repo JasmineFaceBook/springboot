@@ -1,5 +1,7 @@
 package com.cn.jasmine.demo.web;
 
+import com.cn.jasmine.demo.utils.ExcelUtils;
+import com.cn.jasmine.demo.utils.ZipUtil;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.Cell;
@@ -16,6 +18,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.util.List;
 
 
 @RestController
@@ -25,6 +28,18 @@ public class DownLoadApi {
 
     @Value("${file.upload}")
     private String fileUpload;
+
+
+    @RequestMapping(value="/downZip",method={RequestMethod.GET})
+    @ResponseBody
+    public void downZip(HttpServletResponse res) throws IOException {
+      //  List<File> srcfile= ExcelUtils.getFileList();
+      //  ZipUtil.zipFiles(srcfile, "压缩文件",res);
+        for(int i=0;;i++){
+            System.out.println("i:"+i);
+        }
+    }
+
 
     @RequestMapping(value="/downExcel",method={RequestMethod.GET})
     @ResponseBody
